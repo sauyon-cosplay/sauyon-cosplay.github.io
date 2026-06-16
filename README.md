@@ -1,5 +1,3 @@
-(https://github.com/user-attachments/files/29023194/sauyonn_landing.html)
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
