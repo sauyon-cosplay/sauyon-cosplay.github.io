@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sauyonn — cosplay</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --mint:       #c8f0d8;
+    --sage:       #a8e6c0;
+    --pale:       #e8f8f0;
+    --deep-sage:  #4a9e6f;
+    --forest:     #2d5a42;
+    --glow:       rgba(168, 230, 192, 0.45);
+    --white-soft: rgba(255,255,255,0.82);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(160deg, #d6f5e3 0%, #c0edcd 30%, #e4f9ee 60%, #b8eac8 100%);
+    min-height: 100vh;
+    color: var(--forest);
+    overflow-x: hidden;
+  }
+
+  /* ── PARTICLES ── */
+  #particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(168,230,192,0.6) 60%, transparent 100%);
+    animation: drift linear infinite;
+    opacity: 0;
+  }
+  @keyframes drift {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.5; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ── WRAPPER ── */
+  .page { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    align-items: stretch;
+  }
+
+  /* Photo collage — left column */
+  .collage {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+  .collage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    height: 100%;
+    gap: 3px;
+  }
+  .collage-grid .photo {
+    overflow: hidden;
+    position: relative;
+  }
+  .collage-grid .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+  }
+  .collage-grid .photo:hover img { transform: scale(1.06); }
+  .photo-1 { grid-column: 1; grid-row: 1 / 3; }
+  .photo-2 { grid-column: 2; grid-row: 1; }
+  .photo-3 { grid-column: 2; grid-row: 2; }
+  .photo-4 { grid-column: 1; grid-row: 3; }
+  .photo-5 { grid-column: 2; grid-row: 3; }
+
+  /* shimmer overlay on collage */
+  .collage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 60%, rgba(200,240,216,0.25) 100%);
+    pointer-events: none;
+  }
+
+  /* Right column — text + links */
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 4rem 4rem 3.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(200,240,216,0.35) 100%);
+    backdrop-filter: blur(2px);
+    border-left: 1px solid rgba(255,255,255,0.6);
+  }
+
+  .eyebrow {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--deep-sage);
+    margin-bottom: 1rem;
+    opacity: 0.85;
+  }
+
+  .hero-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--forest);
+    margin-bottom: 0.6rem;
+    text-shadow: 0 2px 20px rgba(74,158,111,0.18);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--deep-sage);
+    margin-bottom: 2.8rem;
+    line-height: 1.6;
+    max-width: 340px;
+  }
+
+  /* decorative divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2.8rem;
+    width: 100%;
+    max-width: 340px;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--sage), transparent); }
+  .divider-gem {
+    width: 8px; height: 8px;
+    background: var(--deep-sage);
+    border-radius: 2px;
+    transform: rotate(45deg);
+    box-shadow: 0 0 8px var(--deep-sage);
+  }
+
+  /* ── SOCIAL LINKS ── */
+  .socials {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.4rem;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    position: relative;
+    overflow: hidden;
+    color: var(--forest);
+  }
+  .social-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    background: rgba(255,255,255,0.25);
+  }
+  .social-btn:hover::before { opacity: 1; }
+  .social-btn:hover {
+    transform: translateX(6px) translateY(-1px);
+  }
+
+  .social-btn .icon-wrap {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .social-btn .label-group { display: flex; flex-direction: column; }
+  .social-btn .platform { font-size: 0.75rem; font-weight: 300; opacity: 0.7; letter-spacing: 0.1em; text-transform: uppercase; }
+  .social-btn .handle { font-size: 1rem; font-weight: 700; }
+
+  /* TikTok */
+  .btn-tiktok {
+    background: linear-gradient(135deg, #b6f0cc 0%, #d4f7e5 100%);
+    box-shadow: 0 4px 20px rgba(74,158,111,0.18);
+    border: 1px solid rgba(255,255,255,0.7);
+  }
+  .btn-tiktok:hover { box-shadow: 0 6px 28px rgba(74,158,111,0.32); }
+  .btn-tiktok .icon-wrap { background: rgba(255,255,255,0.6); }
+
+  /* YouTube */
+  .btn-youtube {
+    background: linear-gradient(135deg, #c5f2d5 0%, #dff8ea 100%);
+    box-shadow: 0 4px 20px rgba(74,158,111,0.14);
+    border: 1px solid rgba(255,255,255,0.7);
+  }
+  .btn-youtube:hover { box-shadow: 0 6px 28px rgba(74,158,111,0.28); }
+  .btn-youtube .icon-wrap { background: rgba(255,255,255,0.6); }
+
+  /* Twitch */
+  .btn-twitch {
+    background: linear-gradient(135deg, #d2f5e0 0%, #e5faf0 100%);
+    box-shadow: 0 4px 20px rgba(74,158,111,0.12);
+    border: 1px solid rgba(255,255,255,0.7);
+  }
+  .btn-twitch:hover { box-shadow: 0 6px 28px rgba(74,158,111,0.26); }
+  .btn-twitch .icon-wrap { background: rgba(255,255,255,0.6); }
+
+  /* SVG icons */
+  svg { display: block; }
+
+  /* footer */
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--deep-sage);
+    opacity: 0.6;
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: unset;
+    }
+    .collage { min-height: 55vw; }
+    .hero-content {
+      padding: 2.5rem 1.8rem 3rem;
+      align-items: center;
+      text-align: center;
+    }
+    .divider { max-width: 260px; margin-left: auto; margin-right: auto; }
+    .socials { max-width: 320px; margin: 0 auto; }
+    .hero-sub { max-width: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating particles -->
+<div id="particles"></div>
+
+<div class="page">
+  <main class="hero">
+
+    <!-- LEFT: photo collage -->
+    <div class="collage">
+      <div class="collage-grid">
+        <div class="photo photo-1">
+          <img src="/mnt/user-data/uploads/IMG_3481.JPG" alt="Cosplay 1">
+        </div>
+        <div class="photo photo-2">
+          <img src="/mnt/user-data/uploads/IMG_3103.JPG" alt="Cosplay 2">
+        </div>
+        <div class="photo photo-3">
+          <img src="/mnt/user-data/uploads/Стоя_портрет_1.jpg" alt="Cosplay 3">
+        </div>
+        <div class="photo photo-4">
+          <img src="/mnt/user-data/uploads/IMG_0906.JPG" alt="Cosplay 4">
+        </div>
+        <div class="photo photo-5">
+          <img src="/mnt/user-data/uploads/IMG_0887.JPG" alt="Cosplay 5">
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: content -->
+    <div class="hero-content">
+      <p class="eyebrow">✦ cosplayer &amp; creator ✦</p>
+      <h1 class="hero-name">sauyonn</h1>
+      <p class="hero-sub">Bringing anime &amp; game characters to life — one costume at a time.</p>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-gem"></div>
+        <div class="divider-line" style="background: linear-gradient(90deg, transparent, var(--sage));"></div>
+      </div>
+
+      <div class="socials">
+
+        <!-- TikTok -->
+        <a class="social-btn btn-tiktok" href="https://www.tiktok.com/@sauyonn?_r=1&_t=ZT-94s5StIoKAX" target="_blank" rel="noopener">
+          <div class="icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z" fill="#2d5a42"/>
+            </svg>
+          </div>
+          <div class="label-group">
+            <span class="platform">TikTok</span>
+            <span class="handle">@sauyonn</span>
+          </div>
+          <svg style="margin-left:auto;opacity:0.4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d5a42" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+
+        <!-- YouTube -->
+        <a class="social-btn btn-youtube" href="https://www.youtube.com/@sauyonn" target="_blank" rel="noopener">
+          <div class="icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="#2d5a42"/>
+              <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#e8f8f0"/>
+            </svg>
+          </div>
+          <div class="label-group">
+            <span class="platform">YouTube</span>
+            <span class="handle">@sauyonn</span>
+          </div>
+          <svg style="margin-left:auto;opacity:0.4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d5a42" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+
+        <!-- Twitch -->
+        <a class="social-btn btn-twitch" href="https://www.twitch.tv/sauyon" target="_blank" rel="noopener">
+          <div class="icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z" fill="#2d5a42"/>
+            </svg>
+          </div>
+          <div class="label-group">
+            <span class="platform">Twitch</span>
+            <span class="handle">sauyon</span>
+          </div>
+          <svg style="margin-left:auto;opacity:0.4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2d5a42" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>✦ &nbsp; sauyonn &nbsp; · &nbsp; cosplay &amp; content &nbsp; ✦</footer>
+</div>
+
+<script>
+// Generate floating star particles
+const container = document.getElementById('particles');
+const count = 28;
+for (let i = 0; i < count; i++) {
+  const el = document.createElement('div');
+  el.className = 'star';
+  const size = Math.random() * 7 + 3;
+  el.style.cssText = `
+    width: ${size}px;
+    height: ${size}px;
+    left: ${Math.random() * 100}%;
+    animation-duration: ${Math.random() * 14 + 10}s;
+    animation-delay: ${Math.random() * 12}s;
+    opacity: 0;
+  `;
+  container.appendChild(el);
+}
+</script>
+</body>
+</html>
